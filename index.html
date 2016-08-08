@@ -9,13 +9,17 @@
   <link href="vendor/prettify.css" rel="stylesheet" media="screen">
   <link href="css/style.css" rel="stylesheet" media="screen, print">
   <link href="img/favicon.ico" rel="icon" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+  <link href="css/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
   <script src="vendor/polyfill.js"></script>
 </head>
 <body>
 
 <script id="template-sidenav" type="text/x-handlebars-template">
 <nav id="scrollingNav">
+
   <ul class="sidenav nav nav-list">
+
   {{#each nav}}
     {{#if title}}
       {{#if isHeader}}
@@ -35,11 +39,236 @@
 </nav>
 </script>
 
+<div id="header">
+  <h1>
+    <img src="img/ldc-via-logo-96px.png" class="pull-right img-responsive" />
+    LDC Via API Documentation
+  </h1>
+  <p>
+    Welcome to the LDC Via API! You can use our API to access LDC Via API endpoints,
+    this allows you to access and modify documents within databases in your organisation.
+  </p>
+  <p>
+    If you're just getting started with LDC Via, we have a page <a href="http://ldcvia.com/developers">dedicated to developers</a>.
+  </p>
+  <p>
+    You can view code example POST and response data below each section and some of
+    the sections contain code samples as well.
+  </p>
+  <p>
+    We're always looking to improve the documentation, so if you spot a mistake or have an idea,
+    please <a href="https://ldcvia.zendesk.com/hc/en-gb/requests/new">contact us</a>.
+  </p>
+  <h2>Authentication</h2>
+  <p>Every operation you perform with the API must be authenticated. You can authenticate two different ways: either <a href="#api-Authentication-loginapikey">pass an HTTP header</a> called "apikey", or <a href="#api-Authentication-logincookie">generate a session cookie</a> and make sure that it is passed with each request.</p>
+  <p>To locate your API key, this video will be useful:</p>
+  <p>
+    <iframe src="https://player.vimeo.com/video/113910972" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+  </p>
+  <h2>Sample Code</h2>
+  <p>You can use whatever language you prefer to access the LDC Via API, most commonly this might be JavaScript, Java, .Net or PHP.</p>
+  <p>Below are a few examples of how to consume LDC Via services</p>
+  <h3>JavaScript / jQuery</h3>
+  <p>
+    <ul class="nav nav-tabs nav-tabs-examples">
+      <li class="active">
+        <a href="#jqueryexampleget">GET</a>
+      </li>
+      <li>
+        <a href="#jqueryexamplepost">POST</a>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane active" id="jqueryexampleget">
+        <pre><code>
+/*
+* Get the properties of the database "mydatabase" and log them to the browser console
+*/
+$.ajax({
+    dataType: 'json',
+    type: 'GET',
+    headers: { 'apikey': apikey },
+    url: 'https://eu.ldcvia.com/1.0/database/mydatabase',
+    success: function(res){
+     console.log(res);
+    },
+    error: function(xhr, status, error){
+     if (xhr.status == 401){
+      alert("You do not have the rights to access the database");
+     }else{
+      alert(status + '\n' + error);
+     }
+    }
+  }
+);
+        </code></pre>
+      </div>
+      <div class="tab-pane" id="jqueryexamplepost">
+        <pre><code>
+/*
+* Update the database properties to make the database readonly, have a title of "New Title",
+* create a full text index and add some meta data
+*/
+var data = {readonly:true, title: "New Title", indexed: true, meta: {["unstructured array item"]}};
+$.ajax({
+  dataType: 'json',
+  type: 'POST',
+  data: data,
+  headers: { 'apikey': apikey },
+  url: 'https://eu.ldcvia.com/1.0/database/mydatabase',
+  success: function(res){
+    //do something
+  },
+  error: function(xhr, status, error){
+    if (xhr.status == 401){
+      alert("You do not have the rights to access the database");
+    }else{
+      alert(status + '\n' + error);
+    }
+  }
+});
+        </code></pre>
+      </div>
+    </div>
+  </p>
+  <h3>Java</h3>
+  <p>
+    <ul class="nav nav-tabs nav-tabs-examples">
+      <li class="active">
+        <a href="#javaexampleget">GET</a>
+      </li>
+      <li>
+        <a href="#javaexamplepost">POST</a>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane active" id="javaexampleget">
+        <pre><code>
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Map;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClientBuilder;
+
+import com.google.gson.Gson;
+
+public class GetDatabaseDetails {
+
+  public class DataInfo {
+    private String id = null;
+    private String name = null;
+  }
+
+  public class WebObjectResponse {
+    private Map<String, DataInfo> details;
+  }
+
+  public static void main(String[] args) {
+    try {
+      // create HTTP Client
+      HttpClient httpClient = HttpClientBuilder.create().build();
+      // Create new getRequest with below mentioned URL
+      HttpGet getRequest = new HttpGet("https://eu.ldcvia.com/database/mydatabase");
+      getRequest.addHeader("accept", "application/json");
+      getRequest.addHeader("apikey", "mysupersecretapikey");
+      // Execute your request and catch response
+      HttpResponse response = httpClient.execute(getRequest);
+      // Check for HTTP response code: 200 = success
+      if (response.getStatusLine().getStatusCode() != 200) {
+        throw new RuntimeException("Failed : HTTP error code : " + response.getStatusLine().getStatusCode());
+      }
+      // Get-Capture Complete application/xml body response
+      BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent())));
+      String json = "";
+      String output;
+      // Simply iterate through XML response and show on console.
+      while ((output = br.readLine()) != null) {
+        json += output;
+      }
+      Gson gson = new Gson();
+
+      WebObjectResponse dbdetails = gson.fromJson(json, WebObjectResponse.class);
+
+    } catch (ClientProtocolException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+}
+        </code></pre>
+      </div>
+      <div class="tab-pane" id="javaexamplepost">
+        <pre><code>
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Map;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.HttpClientBuilder;
+
+public class SetDatabaseDetails {
+
+  public class DataInfo {
+    private String id = null;
+    private String name = null;
+  }
+
+  public class WebObjectResponse {
+    private Map<String, DataInfo> details;
+  }
+
+  public static void main(String[] args) {
+    try {
+      // create HTTP Client
+      HttpClient httpClient = HttpClientBuilder.create().build();
+      // Create new postRequest with below mentioned URL
+      HttpPost postRequest = new HttpPost("https://eu.ldcvia.com/database/mydatabase");
+      StringEntity params =new StringEntity("{\"title\":\"New Title\",\"indexed\":true} ");
+      postRequest.setEntity(params);
+      postRequest.addHeader("Content-Type", "application/json");
+      postRequest.addHeader("apikey", "mysupersecretapikey");
+      // Execute your request and catch response
+      HttpResponse response = httpClient.execute(postRequest);
+      // Check for HTTP response code: 200 = success
+      if (response.getStatusLine().getStatusCode() != 200) {
+        throw new RuntimeException("Failed : HTTP error code : " + response.getStatusLine().getStatusCode());
+      }
+      // Get-Capture Complete application/xml body response
+      BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent())));
+      String json = "";
+      String output;
+      // Simply iterate through XML response and show on console.
+      while ((output = br.readLine()) != null) {
+        json += output;
+      }
+      Gson gson = new Gson();
+
+      WebObjectResponse dbdetails = gson.fromJson(json, WebObjectResponse.class);
+
+    } catch (ClientProtocolException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+}
+        </code></pre>
+      </div>
+    </div>
+  </p>
+</div>
+
 <script id="template-project" type="text/x-handlebars-template">
-  <div class="pull-left">
-    <h1>{{name}}</h1>
-    {{#if description}}<h2>{{{nl2br description}}}</h2>{{/if}}
-  </div>
   {{#if template.withCompare}}
   <div class="pull-right">
     <div class="btn-group">
@@ -653,7 +882,6 @@
     <p>Loading...</p>
   </div>
 </div>
-
 <script data-main="main.js" src="vendor/require.min.js"></script>
 </body>
 </html>

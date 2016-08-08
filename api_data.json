@@ -916,7 +916,7 @@
     "type": "post",
     "url": "/login",
     "title": "Login (API Key)",
-    "description": "<p>Given a username and password, this method returns the API key for the user which can then be used in future requests as an HTTP Header</p>",
+    "description": "<p>Given a username and password, this method returns the API key for the user which can then be used in future requests as an HTTP Header To locate your API key, this video will be useful:</p> <iframe src=\"https://player.vimeo.com/video/113910972\" width=\"640\" height=\"360\" frameborder=\"0\" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>",
     "name": "loginapikey",
     "version": "1.0.20160607",
     "group": "Authentication",
@@ -1380,6 +1380,11 @@
         {
           "title": "Full Text Query:",
           "content": " {\n  \"fulltext\": \"some text\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Mixed Query:",
+          "content": "{\n \"filters\": [{\n   \"operator\": \"contains\",\n   \"field\": \"Body\",\n   \"value\": \"test\"\n }], \n \"fulltext\": \"some text\"\n}",
           "type": "json"
         }
       ]
