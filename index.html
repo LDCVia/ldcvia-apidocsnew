@@ -19,7 +19,15 @@
 <nav id="scrollingNav">
 
   <ul class="sidenav nav nav-list">
-
+    <li class="nav-header" data-group="Introduction">
+      <a href="#Introduction">Introduction</a>
+    </li>
+    <li data-group="Introduction" data-name="Authentication">
+      <a href="#Authentication">Authentication</a>
+    </li>
+    <li data-group="Introduction" data-name="SampleCode">
+      <a href="#SampleCode">Sample Code</a>
+    </li>
   {{#each nav}}
     {{#if title}}
       {{#if isHeader}}
@@ -40,6 +48,7 @@
 </script>
 
 <div id="header">
+  <a id="Introduction"></a>
   <h1>
     <img src="img/ldc-via-logo-96px.png" class="pull-right img-responsive" />
     LDC Via API Documentation
@@ -59,13 +68,13 @@
     We're always looking to improve the documentation, so if you spot a mistake or have an idea,
     please <a href="https://ldcvia.zendesk.com/hc/en-gb/requests/new">contact us</a>.
   </p>
-  <h2>Authentication</h2>
+  <h2 id="Authentication">Authentication</h2>
   <p>Every operation you perform with the API must be authenticated. You can authenticate two different ways: either <a href="#api-Authentication-loginapikey">pass an HTTP header</a> called "apikey", or <a href="#api-Authentication-logincookie">generate a session cookie</a> and make sure that it is passed with each request.</p>
   <p>To locate your API key, this video will be useful:</p>
   <p>
     <iframe src="https://player.vimeo.com/video/113910972" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
   </p>
-  <h2>Sample Code</h2>
+  <h2 id="SampleCode">Sample Code</h2>
   <p>You can use whatever language you prefer to access the LDC Via API, most commonly this might be JavaScript, Java, .Net or PHP.</p>
   <p>Below are a few examples of how to consume LDC Via services</p>
   <h3>JavaScript / jQuery</h3>
