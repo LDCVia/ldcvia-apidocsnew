@@ -68,10 +68,10 @@ define({ "api": [
     "groupTitle": "Access_Control"
   },
   {
-    "type": "get",
+    "type": "delete",
     "url": "/userdetails/:useremail/:db",
-    "title": "Add user to database",
-    "description": "<p>Adds the specified user to the specified database</p>",
+    "title": "Remove user from database",
+    "description": "<p>Removes the specified user from the specified database</p>",
     "name": "addusertodatabase",
     "version": "1.0.20160607",
     "group": "Access_Control",
@@ -92,10 +92,10 @@ define({ "api": [
     "groupTitle": "Access_Control"
   },
   {
-    "type": "delete",
+    "type": "get",
     "url": "/userdetails/:useremail/:db",
-    "title": "Remove user from database",
-    "description": "<p>Removes the specified user from the specified database</p>",
+    "title": "Add user to database",
+    "description": "<p>Adds the specified user to the specified database</p>",
     "name": "addusertodatabase",
     "version": "1.0.20160607",
     "group": "Access_Control",
@@ -165,9 +165,9 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/dbacl/:db",
-    "title": "Get database users",
-    "description": "<p>Returns an array of all the people who have access to the specified database</p>",
+    "url": "/groups/:group",
+    "title": "Get group members",
+    "description": "<p>Returns an array of all the members of a group</p>",
     "name": "getgroupmembers",
     "version": "1.0.20160607",
     "group": "Access_Control",
@@ -196,9 +196,9 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/groups/:group",
-    "title": "Get group members",
-    "description": "<p>Returns an array of all the members of a group</p>",
+    "url": "/dbacl/:db",
+    "title": "Get database users",
+    "description": "<p>Returns an array of all the people who have access to the specified database</p>",
     "name": "getgroupmembers",
     "version": "1.0.20160607",
     "group": "Access_Control",
@@ -916,7 +916,7 @@ define({ "api": [
     "type": "post",
     "url": "/login",
     "title": "Login (API Key)",
-    "description": "<p>Given a username and password, this method returns the API key for the user which can then be used in future requests as an HTTP Header To locate your API key, this video will be useful:</p> <iframe src=\"https://player.vimeo.com/video/113910972\" width=\"640\" height=\"360\" frameborder=\"0\" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>",
+    "description": "<p>Given a username and password, this method returns the API key for the user which can then be used in future requests as an HTTP Header. To locate your API key, this video will be useful:</p> <iframe src=\"https://player.vimeo.com/video/113910972\" width=\"640\" height=\"360\" frameborder=\"0\" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>",
     "name": "loginapikey",
     "version": "1.0.20160607",
     "group": "Authentication",
@@ -1315,6 +1315,112 @@ define({ "api": [
     "type": "post",
     "url": "/collections/:db/:collection",
     "title": "Search Collection Data",
+    "description": "<p>To perform a search against a collection, you can submit queries to be run against one or more fields or against the entire collection using full text. To use a full text query, the database must be indexed which can be enabled in DB Viewer - Database Settings or using the <a href=\"#api-Database-SetDatabaseDetails\">Set Database Details</a> API. Search queries are built up using an array of JSON objects. You can search for exact matches in a field, fields that contain text, or date and number ranges. You can add as many parameters to a search as are required to get the set of documents that you need, and then use the URL parameters count and start to page through the results. In this way you can effectively create the equivalent of Notes views of data. Full Text and field based queries can be mixed together in the same request if required. Keywords that you can use to search for data include: &quot;contains&quot;\tused to search a field to see if it contains the value being searched for &quot;equals&quot;\tused to find a field that is an exact match for the value being searched for &quot;$gte&quot;\tused when searching for dates and numbers greater than or equal to the value entered. For dates the full ISO 8601 format should be used &quot;$lte&quot;\tused when searching for dates and numbers less than or equal to the value entered. For dates the full ISO 8601 format should be used Examples of different search JSON objects can be seen below. When you enter multiple criteria, they are applied together with an OR style join by default, change this to AND using the URL parameter “…&amp;join=and”. You can also perform a regular expression based search that allows you to perform case insensitive searches or more complex queries.</p>",
+    "name": "searchcollectiondata",
+    "version": "1.0.20160801",
+    "group": "Collection",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "start",
+            "description": "<p>A URL query string parameter to define where in the collection to start. Default == 0</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "count",
+            "description": "<p>A URL query string parameter to define how many documents to return in the response. Default == 30</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "sortasc",
+            "description": "<p>A URL query string parameter to allow you to send the name of a field to sort results ascending with. Default == null</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "sortdesc",
+            "description": "<p>A URL query string parameter to allow you to send the name of a field to sort results descending with. Default == __created</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "join",
+            "description": "<p>A URL query string parameter to allow you to define how the query is executed. By default an OR style query is used, this can be changed to &quot;and&quot;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "object",
+            "optional": false,
+            "field": "post-object",
+            "description": "<p>A JSON object describing the filter to apply. You can mix and match queries of any type to locate the documents you want.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Text filters:",
+          "content": " {\n  \"filters\": [{\n    \"operator\": \"contains\",\n    \"field\": \"Body\",\n    \"value\": \"test\"\n  },\n  {\n    \"operator\": \"equals\",\n    \"field\": \"From\",\n    \"value\": \"fred@ldcvia.com\"\n  }]\n}",
+          "type": "json"
+        },
+        {
+          "title": "Date Filters:",
+          "content": " {\n  \"filters\": [\n  {\n    \"operator\": \"$gte\",\n    \"field\": \"__created\",\n    \"value\": \"2015-01-01T00:00:00\"\n  },\n  {\n    \"operator\": \"$lte\",\n    \"field\": \"__created\",\n    \"value\": \"2015-01-31T23:59:59\"\n  }\n  ]\n}",
+          "type": "json"
+        },
+        {
+          "title": "Full Text Query:",
+          "content": " {\n  \"fulltext\": \"some text\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Mixed Query:",
+          "content": "{\n \"filters\": [{\n   \"operator\": \"contains\",\n   \"field\": \"Body\",\n   \"value\": \"test\"\n }],\n \"fulltext\": \"some text\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Regular Expression Query:",
+          "content": "// We recommend using https://regex101.com/ to build your regular expressions.\n// In this example we are searching for documents where the field \"Body\" contains any instance of the word \"test\" in any form,\n// e.g. \"TEST\", \"test\" or \"Test\"\n{\n \"filters\": [{\n   \"operator\": \"regex\",\n   \"field\": \"Body\", //The field to operate against\n   \"value\": \"test\", //The regex query to execute, usual regex syntax applies\n   \"options\": \"i\" //This is an optional parameter to enable features such as case insensitivity, global, single line etc.\n }]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "object",
+            "optional": false,
+            "field": "result",
+            "description": "<p>An object containing the count of documents the user can see, and an array of document objects</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Response-Example:",
+          "content": " {\n\"count\": 24,\n\"data\":[\n{\n\"_id\": \"5729d4cebb68f05e647caa9a\",\n\"From\": \"CN=Matt White/O=Exhilarate\",\n\"AbbreviateFrom\": \"Matt White/Exhilarate\",\n\"AltFrom\": \"CN=Matt White/O=Exhilarate\",\n\"ThreadId\": \"MWHE-9N7QT8\",\n\"MainID\": \"AA43BC3CD46BF58280257D3B006ACE96\",\n\"AbrFrom\": \"Matt_White__Exhilarate\",\n\"WebCategories\": \"Examples\",\n\"Body\": \"(See attached file: Hello.docx)\",\n\"NewsLetterSubject\": \"Small Attachment\",\n\"Subject\": \"Small Attachment\",\n\"Categories\": \"Examples\",\n\"__href\": \"http://dev.londc.com:80/demos/discussion.nsf/api/data/documents/unid/AA43BC3CD46BF58280257D3B006ACE96\",\n\"__unid\": \"AA43BC3CD46BF58280257D3B006ACE96\",\n\"__noteid\": \"117A\",\n\"__created\": \"2014-08-21T19:26:37Z\",\n\"__modified\": \"2014-08-22T06:28:37Z\",\n\"__authors\": \"CN=Matt White/O=Exhilarate\",\n\"__form\": \"MainTopic\",\n\"__readerrole\": \"dev-londc-com-demos-discussion-nsf1462359269872-MainTopic-reader\",\n\"__authorrole\": \"dev-londc-com-demos-discussion-nsf1462359269872-MainTopic-author\",\n\"_files\":[\"Hello.docx\"],\n\"Body__parsed\": \"<html><body><i>(See attached file: Hello.docx)</i></body></html>\"\n}\n]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "controllers/api.collection.v1.js",
+    "groupTitle": "Collection"
+  },
+  {
+    "type": "post",
+    "url": "/collections/:db/:collection",
+    "title": "Search Collection Data",
     "description": "<p>To perform a search against a collection, you can submit queries to be run against one or more fields or against the entire collection using full text. To use a full text query, the database must be indexed which can be enabled in DB Viewer - Database Settings or using the <a href=\"#api-Database-SetDatabaseDetails\">Set Database Details</a> API. Search queries are built up using an array of JSON objects. You can search for exact matches in a field, fields that contain text, or date and number ranges. You can add as many parameters to a search as are required to get the set of documents that you need, and then use the URL parameters count and start to page through the results. In this way you can effectively create the equivalent of Notes views of data. Full Text and field based queries can be mixed together in the same request if required. Keywords that you can use to search for data include: &quot;contains&quot;\tused to search a field to see if it contains the value being searched for &quot;equals&quot;\tused to find a field that is an exact match for the value being searched for &quot;$gte&quot;\tused when searching for dates and numbers greater than or equal to the value entered. For dates the full ISO 8601 format should be used &quot;$lte&quot;\tused when searching for dates and numbers less than or equal to the value entered. For dates the full ISO 8601 format should be used Examples of different search JSON objects can be seen below. When you enter multiple criteria, they are applied together with an OR style join by default, change this to AND using the URL parameter “…&amp;join=and”.</p>",
     "name": "searchcollectiondata",
     "version": "1.0.20160607",
@@ -1384,7 +1490,7 @@ define({ "api": [
         },
         {
           "title": "Mixed Query:",
-          "content": "{\n \"filters\": [{\n   \"operator\": \"contains\",\n   \"field\": \"Body\",\n   \"value\": \"test\"\n }], \n \"fulltext\": \"some text\"\n}",
+          "content": "{\n \"filters\": [{\n   \"operator\": \"contains\",\n   \"field\": \"Body\",\n   \"value\": \"test\"\n }],\n \"fulltext\": \"some text\"\n}",
           "type": "json"
         }
       ]
@@ -1409,7 +1515,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "controllers/api.collection.v1.js",
+    "filename": "controllers/old-api-docs.js",
     "groupTitle": "Collection"
   },
   {
