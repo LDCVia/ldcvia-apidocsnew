@@ -1935,14 +1935,14 @@
             "type": "string",
             "optional": true,
             "field": "immediate",
-            "description": "<p>If you add &quot;&amp;immediate=true&quot; you will just be returned immediate responses to the document, if this is ommitted you will get all responses and responses to responses.</p>"
+            "description": "<p>If you add &quot;&amp;immediate=true&quot; you will just be returned immediate responses to the document, if this is omitted you will get all responses and responses to responses.</p>"
           },
           {
             "group": "Parameter",
             "type": "string",
             "optional": true,
             "field": "threaded",
-            "description": "<p>If you add &quot;&amp;threaded=true&quot; you will get a response array with nested children to show the structure of the response hierarchy. If ommitted you will get a single list of all response documents.</p>"
+            "description": "<p>If you add &quot;&amp;threaded=true&quot; you will get a response array with nested children to show the structure of the response hierarchy. If omitted you will get a single list of all response documents.</p>"
           }
         ]
       }
@@ -2440,7 +2440,7 @@
             "type": "String[]",
             "optional": true,
             "field": "databases",
-            "description": "<p>A list of databases to perform the search against. If ommitted, the search will be performed against all databases</p>"
+            "description": "<p>A list of databases to perform the search against. If omitted, the search will be performed against all databases</p>"
           },
           {
             "group": "Parameter",
