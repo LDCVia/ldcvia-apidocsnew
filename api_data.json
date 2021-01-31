@@ -1565,7 +1565,7 @@
     "type": "post",
     "url": "/stampall/:db",
     "title": "Stamp Document Collection",
-    "description": "<p>Given a database, and an array of __unid values, stamp a value onto each document</p>",
+    "description": "<p>Given a database, and an payload containing \"doc\" and \"field\" values, stamp a field value on to each document</p>",
     "name": "stampall",
     "version": "1.0.20170101",
     "group": "Collection",
@@ -1603,7 +1603,7 @@
             "group": "Success 200",
             "type": "object[]",
             "optional": false,
-            "field": "result",
+            "field": "results",
             "description": ""
           }
         ]
@@ -1611,7 +1611,7 @@
       "examples": [
         {
           "title": "Response:",
-          "content": "{\n\"response\": \"ok\"\n}",
+          "content": "{\n\"results\": \"ok\"\n}",
           "type": "json"
         }
       ]
