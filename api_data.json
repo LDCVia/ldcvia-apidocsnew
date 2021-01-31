@@ -2286,7 +2286,7 @@
       "examples": [
         {
           "title": "Sample Request (Single Document):",
-          "content": " {\n  \"FormName\": \"MainTopic\",\n  \"Categories\", [\"category 1\", \"category 2\"],\n  \"From\": \"fred@ldcvia.com\",\n  \"AbbreviateFrom\": \"Fred Bloggs\",\n  \"Body\": {\n    \"type\": \"multipart\",\n    \"content\": [{\n      \"contentType\": \"text/plain; charset=UTF-8\",\n      \"data\": \"<p>Some HTML</p>\"\n    }]\n  },\n  \"Subject\": \"The subject\",\n}",
+          "content": " {\n  \"FormName\": \"MainTopic\",\n  \"Categories\": [\"category 1\", \"category 2\"],\n  \"From\": \"fred@ldcvia.com\",\n  \"AbbreviateFrom\": \"Fred Bloggs\",\n  \"Body\": {\n    \"type\": \"multipart\",\n    \"content\": [{\n      \"contentType\": \"text/plain; charset=UTF-8\",\n      \"data\": \"<p>Some HTML</p>\"\n    }]\n  },\n  \"Subject\": \"The subject\"\n}",
           "type": "json"
         },
         {
